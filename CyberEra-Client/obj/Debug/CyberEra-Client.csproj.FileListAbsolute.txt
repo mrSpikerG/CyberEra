@@ -1,0 +1,14 @@
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\bin\Debug\NLog.config
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\bin\Debug\CyberEra-Client.exe.config
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\bin\Debug\CyberEra-Client.exe
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\bin\Debug\CyberEra-Client.pdb
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\bin\Debug\NLog.dll
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\bin\Debug\NLog.xml
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.csproj.AssemblyReference.cache
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.csproj.SuggestedBindingRedirects.cache
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra_Client.Properties.Resources.resources
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.csproj.GenerateResource.cache
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.csproj.CoreCompileInputs.cache
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.csproj.CopyComplete
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.exe
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Client\obj\Debug\CyberEra-Client.pdb
