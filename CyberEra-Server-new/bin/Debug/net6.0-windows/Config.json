@@ -1,1 +1,1 @@
-{"Port":8888,"IpAddress":"127.0.0.1","IsBlocked":false}
+{"Port":8888,"IpAddress":"127.0.0.1","DBConnectionString":"Data Source=SQL8001.site4now.net;Initial Catalog=db_a8ec2e_cyberera;User Id=db_a8ec2e_cyberera_admin;Password=S1D4L6K234OD","IsBlocked":false}

@@ -6,9 +6,9 @@ using System.Text.Json;
 
 namespace CyberEra_Server.Control {
     internal class SettingsController {
-        private static Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private static SettingsController SettingsInstance;
-        private string Name = "Config.json";
+        private readonly string Name = "Config.json";
         private Settings Settings;
 
 
@@ -44,6 +44,7 @@ namespace CyberEra_Server.Control {
             this.Settings.Port = 8888;
             this.Settings.IpAddress = "127.0.0.1";
             this.Settings.IsBlocked = false;
+            this.Settings.DBConnectionString = "Data Source=host;Initial Catalog=db_name;User Id=user_name;Password=db_password";
             File.WriteAllText(this.Name, JsonSerializer.Serialize<Settings>(this.Settings));
         }
 

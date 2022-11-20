@@ -10,6 +10,7 @@ namespace CyberEra_Server.Model
     {
         public int Port { get; set; }
         public string IpAddress { get; set; }
+        public string DBConnectionString { get; set; }
         public bool IsBlocked { get; set; }
     }
 }
