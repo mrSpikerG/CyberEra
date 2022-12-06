@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Text.Json;
 using System.Drawing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 using CyberEra_Client.Control;
 using System.Runtime.InteropServices;
+using CyberEra_Client.Model;
 
 namespace CyberEra_Client {
     public partial class ClientForm : Form {
@@ -23,82 +18,91 @@ namespace CyberEra_Client {
         private static WindowsControl WindowsController = new WindowsControl();
 
 
+
         public ClientForm() {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
             this.Bounds = Screen.PrimaryScreen.WorkingArea;
-            // FormClosing += WindowsController.Client_FormClosing_deny;
-            WindowsController.SetAutorunValue(false);
-            const int x = 32000;
-            const int y = 32000;
-            //Put mouse in the screen ceneter and click its right button to prevent ability
-            //of taskbar
-            
+            this.FormClosing += new FormClosingEventHandler(Form1_Closing);
 
 
-int hwnd = FindWindow("Shell_TrayWnd", "");
-            ShowWindow(hwnd, SW_HIDE);
+            // SystemInformation.UserName - имя пользователя
 
-            mouse_event(MouseFlags.Absolute | MouseFlags.Move, x, y, 0, UIntPtr.Zero);
-                    mouse_event(MouseFlags.Absolute | MouseFlags.RightDown, x, y, 0, UIntPtr.Zero);
-                    mouse_event(MouseFlags.Absolute | MouseFlags.RightUp, x, y, 0, UIntPtr.Zero);
-              
-            //const int PORT = 8888;
-            //const string HOST = "127.0.0.1";
-            /*
-                        try {
-                            client.Connect(HOST, PORT);
-                            stream = client.GetStream();
+            Label testLabel = new Label();
+            testLabel.Location = new Point(100, 100);
+            testLabel.AutoSize = true;
+            // DirectoryEntry theEntry = new DirectoryEntry("WinNT://" + Environment.MachineName + ",computer");
+            // UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, userName))
 
-                            //
-                            //  send name
-                            //
-                            byte[] buffer = Encoding.Unicode.GetBytes("");
-                            stream.Write(buffer, 0, buffer.Length);
+            PasswordControl passwordControl = new PasswordControl();
 
-                            //
-                            //  send adress
-                            //
-                            byte[] adr = Encoding.Unicode.GetBytes(GetLocalIPAddress());
-                            stream.Write(adr, 0, adr.Length);
+            testLabel.Text = passwordControl.HasOldPassword("Vasya").ToString();
 
-                        //    SendMsg();
+            //DirectoryEntry user = theEntry.Children.Add(SystemInformation.UserName, "user");
 
-                        } catch (Exception ex) {
-                            //   Console.WriteLine(ex.Message);
-                            File.WriteAllText("logs","");
-                            File.AppendAllText("logs", ex.Message);
-                        } finally {
-                            Disconnect();
-                        }*/
+            //WindowsIdentity.GetCurrent().
+
+            //  const int WTS_CURRENT_SESSION = -1;
+            // IntPtr WTS_CURRENT_SERVER_HANDLE = IntPtr.Zero;
+
+
+            //if (!passwordControl.HasOldPassword("Vasya")) {
+            //    if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, false))
+            //        throw new Win32Exception();
+            //}
+            this.Controls.Add(testLabel);
+
+
+            const int PORT = 8888;
+            const string HOST = "127.0.0.1";
+            Random rand = new Random();
+            try {
+                client.Connect(HOST, PORT);
+                stream = client.GetStream();
+
+                //
+                //  send name
+                //
+
+                CommandBase command = new CommandBase("setName", Environment.MachineName + rand.Next(0, 1000));
+
+
+                byte[] buffer = Encoding.Unicode.GetBytes(JsonSerializer.Serialize(command));
+                LoggerControl.Info($"Send to server {Environment.MachineName}");
+                stream.WriteAsync(buffer, 0, buffer.Length);
+
+                
+
+            } catch (Exception ex) {
+                LoggerControl.Error(ex.Message);
+                LoggerControl.Error(ex.StackTrace);
+            } finally {
+
+            }
             // Console.ReadKey();
+
+
         }
 
 
 
-        [DllImport("user32.dll")]
-        private static extern int FindWindow(string className, string windowText);
-        [DllImport("user32.dll")]
-        private static extern int ShowWindow(int hwnd, int command);
+        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            byte[] buffer = Encoding.Unicode.GetBytes("END");
+            stream.Write(buffer, 0, buffer.Length);
+            LoggerControl.Info($"Send to server END");
+            stream.WriteAsync(buffer, 0, buffer.Length);
+            Disconnect();
+        }
 
-        private const int SW_HIDE = 0;
-        private const int SW_SHOW = 1;
+        [DllImport("wtsapi32.dll", SetLastError = true)]
+        static extern bool WTSDisconnectSession(IntPtr hServer, int sessionId, bool bWait);
+
+        [DllImport("Kernel32.dll", SetLastError = true)]
+        static extern int WTSGetActiveConsoleSessionId();
 
 
 
-        [DllImport("User32.dll")]
-        static extern void mouse_event(MouseFlags dwFlags, int dx, int dy, int dwData, UIntPtr dwExtraInfo);
 
-        //Mouse flags enum
-        [Flags]
-        enum MouseFlags {
-            Move = 0x0001,
-            LeftDown = 0x0002,
-            LeftUp = 0x0004,
-            RightDown = 0x0008,
-            RightUp = 0x0010,
-            Absolute = 0x8000
-        };
 
         /*   private static void SendMsg() {
                Console.Write("Enter msg:\t");
@@ -140,9 +144,13 @@ int hwnd = FindWindow("Shell_TrayWnd", "");
          }
  */
         private static void Disconnect() {
-            stream.Close();
-            client.Close();
+            if (stream != null)
+                stream.Close();
+            if (client != null)
+                client.Close();
         }
+
+
 
         public static string GetLocalIPAddress() {
             var host = Dns.GetHostEntry(Dns.GetHostName());

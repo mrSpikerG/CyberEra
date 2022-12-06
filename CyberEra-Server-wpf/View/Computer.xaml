@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="CyberEra_Server_wpf.View.Computer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CyberEra_Server_wpf.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" d:DesignWidth="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+            <ColumnDefinition ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+
+
+        <Rectangle Grid.RowSpan="2" Grid.ColumnSpan="2" Fill="#131C29" ></Rectangle>
+        <Rectangle Grid.RowSpan="2"  Fill="#080F16" >
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Image Grid.RowSpan="2" Margin="12" Source="https://i.imgur.com/WmJTamx.png"></Image>
+
+      
+        <TextBlock Foreground="White" Text="{Binding Path=ComputerName}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" FontFamily="Brutal type"></TextBlock>
+        <TextBlock Foreground="White" Text="{Binding Path=TimeOfUpdating}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" FontFamily="Brutal type"></TextBlock>
+    </Grid>
+</UserControl>

@@ -1,0 +1,65 @@
+﻿<Window x:Class="CyberEra_Server_wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CyberEra_Server_wpf" 
+        xmlns:uc="clr-namespace:CyberEra_Server_wpf.View"
+        xmlns:viewmodel="clr-namespace:CyberEra_Server_wpf.ViewModel" 
+        d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
+        mc:Ignorable="d"
+        
+        Icon="/View/icon.png"
+        Title="CyberEra | Server" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160*"></ColumnDefinition>
+            <ColumnDefinition Width="377*"></ColumnDefinition>
+            <ColumnDefinition Width="263*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <Rectangle Grid.RowSpan="5" Grid.ColumnSpan="3" Fill="#131C29"></Rectangle>
+
+        <Rectangle Grid.RowSpan="5"  Fill="#1F2A38">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="0"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        
+        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type"  Grid.Row="0">Компьютеры </Button>
+        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type"  Grid.Row="1">Пароли</Button>
+        <!--<Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type" Grid.Row="2">Админ-панель</Button>-->
+
+
+        <!--<uc:Computer Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" DataContext="{Binding SelectedComputer}"></uc:Computer>-->
+
+
+        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type" Grid.Column="1" Margin="100 0" Grid.Row="4">Выдать пароль</Button>
+        
+        <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="150 50 50 50">
+            <ListBox Background="#1F2A38" Grid.ColumnSpan="2" ItemsSource="{Binding Computers, UpdateSourceTrigger=PropertyChanged}"
+                 SelectedItem="{Binding SelectedComputer}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+               
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <uc:Computer Margin="0 2" DataContext="{Binding}"></uc:Computer>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        
+    </Grid>
+</Window>

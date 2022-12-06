@@ -21,13 +21,15 @@ namespace CyberEra_Client.Control {
                 }
                 reg.Close();
             } catch {
+                LoggerControl.Error("Autorun wasn't setuped");
                 return false;
             }
+                LoggerControl.Error("Autorun setuped");
             return true;
         }
 
+        
 
-      
 
         //
         //  Запретить закрытие
