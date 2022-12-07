@@ -61,11 +61,10 @@ namespace CyberEra_Server_wpf.ViewModel {
             LoggerController.Debug("create ViewModel");
             this.Computers = new ObservableCollection<Model.Computer>();
             this.Passwords = new ObservableCollection<Model.Computer>();
-            this.Passwords.Add(new Model.Computer("ee", "eee", "eeee"));
             this.Users = new List<Client>();
             this.Server = new Server();
-            this.IsPasswordHiden = Visibility.Visible;
-            this.IsComputersHidden = Visibility.Hidden;
+            this.IsPasswordHiden = Visibility.Hidden;
+            this.IsComputersHidden = Visibility.Visible;
             StartServer();
         }
 
@@ -163,15 +162,7 @@ namespace CyberEra_Server_wpf.ViewModel {
             }
         }
 
-        private RelayCommand checkPassword;
-        public RelayCommand CheckPassword {
-            get {
-                return checkPassword ??
-                  (checkPassword = new RelayCommand(obj => {
-
-                  }));
-            }
-        }
+     
 
         internal void StartServer() {
             Task.Factory.StartNew(() => {

@@ -1,6 +1,7 @@
 ﻿
 using Azure;
 using CyberEra_Server_wpf.Control;
+using CyberEra_Server_wpf.Model.DataBaseModels;
 using CyberEra_Server_wpf.ViewModel;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -68,8 +69,10 @@ namespace CyberEra_Server_wpf.Model {
                                     using (IDbConnection db = new SqlConnection(SettingsController.GetInstance().GetSettings().DBConnectionString)) {
                                         db.Execute("INSERT INTO Clients([Name]) VALUES (@Name)", new { Name = this.PCName });
                                     }
-                                    PasswordController.TryGenerateNewPassword(this.PCName, DateTime.Now.AddMinutes(5));
-                                }catch(Exception e) {
+                                   
+
+                                    PasswordSchedule();
+                                } catch(Exception e) {
                                     LoggerController.Error(e.Message);
                                     LoggerController.Error(e.StackTrace);
                                 }
@@ -92,7 +95,7 @@ namespace CyberEra_Server_wpf.Model {
         public bool sendMsg(string Message) {
 
             try {
-                byte[] buffer = Encoding.Unicode.GetBytes(JsonSerializer.Serialize(Message));
+                byte[] buffer = Encoding.Unicode.GetBytes(Message);
                 LoggerController.Info($"Send to {this.Id} message {Message}");
                 this.NetworkStream.WriteAsync(buffer, 0, buffer.Length);
 
@@ -119,9 +122,19 @@ namespace CyberEra_Server_wpf.Model {
 
 
         public void PasswordSchedule() {
-            
-            CommandBase command = new CommandBase("checkPassword","passw");
-            Thread.Sleep(60000);
+            while (true) {
+
+                PasswordController.TryGenerateNewPassword(this.PCName, DateTime.Now.AddMinutes(20));
+
+                using (IDbConnection db = new SqlConnection(SettingsController.GetInstance().GetSettings().DBConnectionString)) {
+
+                    UserPassword pass = db.Query<UserPassword>("SELECT * FROM Passwords WHERE UserName=@Name", new { Name = this.PCName }).FirstOrDefault();
+                    CommandBase command = new CommandBase("checkPassword", pass.Password);
+                    this.sendMsg(JsonSerializer.Serialize(command));
+                }
+                Thread.Sleep(60*1000);
+
+            }
         }
 
 

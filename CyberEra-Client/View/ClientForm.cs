@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.DirectoryServices.ActiveDirectory;
 using System.Threading;
 using System.IO;
+using System.ComponentModel;
 
 namespace CyberEra_Client {
     public partial class ClientForm : Form {
@@ -27,39 +28,15 @@ namespace CyberEra_Client {
 
         public ClientForm() {
             InitializeComponent();
-            this.WindowState = FormWindowState.Maximized;
+            this.WindowState = FormWindowState.Minimized;
             this.Bounds = Screen.PrimaryScreen.WorkingArea;
             this.FormClosing += new FormClosingEventHandler(ClientFormClosing);
-
-
-            // SystemInformation.UserName - имя пользователя
-
-
-            // DirectoryEntry theEntry = new DirectoryEntry("WinNT://" + Environment.MachineName + ",computer");
-            // UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, userName))
-
-
-
-
-
-            //DirectoryEntry user = theEntry.Children.Add(SystemInformation.UserName, "user");
-
-            //WindowsIdentity.GetCurrent().
-
-            //  const int WTS_CURRENT_SESSION = -1;
-            // IntPtr WTS_CURRENT_SERVER_HANDLE = IntPtr.Zero;
-
-
-            //if (!passwordControl.HasOldPassword("Vasya")) {
-            //    if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, false))
-            //        throw new Win32Exception();
-            //}
-
-
+            this.ShowInTaskbar= false;
+            
 
             const int PORT = 8888;
             const string HOST = "127.0.0.1";
-
+           
             try {
                 client.Connect(HOST, PORT);
                 stream = client.GetStream();
@@ -86,6 +63,14 @@ namespace CyberEra_Client {
             }
         }
 
+        protected override CreateParams CreateParams {
+            get {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
+        }
+
         private void ClientFormClosing(object sender, System.ComponentModel.CancelEventArgs e) {
             byte[] buffer = Encoding.Unicode.GetBytes("END");
             stream.Write(buffer, 0, buffer.Length);
@@ -106,7 +91,7 @@ namespace CyberEra_Client {
                         continue;
 
                     LoggerControl.Info($"recieve msg from server {cmd}");
-                    if (cmd.Equals("\"END\"")) {
+                    if (cmd.Equals("END")) {
                         
                         this.Close();   
                         break;
@@ -150,24 +135,6 @@ namespace CyberEra_Client {
                 client.Close();
         }
 
-        public static string GetLocalIPAddress() {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList) {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-
-
-
-        [DllImport("wtsapi32.dll", SetLastError = true)]
-        static extern bool WTSDisconnectSession(IntPtr hServer, int sessionId, bool bWait);
-
-        [DllImport("Kernel32.dll", SetLastError = true)]
-        static extern int WTSGetActiveConsoleSessionId();
     }
 }
 
