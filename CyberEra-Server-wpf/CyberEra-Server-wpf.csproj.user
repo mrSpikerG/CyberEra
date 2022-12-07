@@ -10,12 +10,18 @@
     <Compile Update="View\Computer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\PasswordGiver.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\Computer.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\PasswordGiver.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

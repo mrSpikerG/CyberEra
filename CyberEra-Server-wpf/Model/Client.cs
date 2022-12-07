@@ -2,8 +2,11 @@
 using Azure;
 using CyberEra_Server_wpf.Control;
 using CyberEra_Server_wpf.ViewModel;
+using Dapper;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -37,7 +40,6 @@ namespace CyberEra_Server_wpf.Model {
             this.TcpClientVariable = client;
             this.NetworkStream = client.GetStream();
             server.AddConnection(this);
-
         }
 
         public void StartClient() {
@@ -49,12 +51,9 @@ namespace CyberEra_Server_wpf.Model {
                     if (cmd == "")
                         continue;
 
-                    if (cmd == "END")
+                    if (cmd.Equals("END")) {
                         break;
-
-
-                    
-
+                    }
 
                     LoggerController.Info($"recieve msg from client {cmd}");
                     CommandBase command = JsonSerializer.Deserialize<CommandBase>(cmd);
@@ -63,19 +62,47 @@ namespace CyberEra_Server_wpf.Model {
                         case "setName":
                             this.PCName = command.CommandArgs;
                             this.ServerView.Computers.FirstOrDefault(x => x.Id.Equals(this.Id)).ComputerName = this.PCName;
+                            
+                            Task.Factory.StartNew(() => {
+                                try {
+                                    using (IDbConnection db = new SqlConnection(SettingsController.GetInstance().GetSettings().DBConnectionString)) {
+                                        db.Execute("INSERT INTO Clients([Name]) VALUES (@Name)", new { Name = this.PCName });
+                                    }
+                                    PasswordController.TryGenerateNewPassword(this.PCName, DateTime.Now.AddMinutes(5));
+                                }catch(Exception e) {
+                                    LoggerController.Error(e.Message);
+                                    LoggerController.Error(e.StackTrace);
+                                }
+                            });
                             break;
                     }
 
 
                 }
             } catch (Exception e) {
-                MessageBox.Show(e.Message + "\n" + e.StackTrace, "Exception");
-                LoggerController.Error(e.Message);
-                LoggerController.Error(e.StackTrace);
+                MessageBox.Show(e.Message, "Exception");
+                LoggerController.Fatal(e.Message);
+                LoggerController.Fatal(e.StackTrace);
             } finally {
                 this.ServerView.DeleteConnetion(this.Id);
                 this.Close();
             }
+        }
+
+        public bool sendMsg(string Message) {
+
+            try {
+                byte[] buffer = Encoding.Unicode.GetBytes(JsonSerializer.Serialize(Message));
+                LoggerController.Info($"Send to {this.Id} message {Message}");
+                this.NetworkStream.WriteAsync(buffer, 0, buffer.Length);
+
+            } catch (Exception e) {
+                LoggerController.Error(e.Message);
+                LoggerController.Error(e.StackTrace);
+                return false;
+            }
+
+            return true;
         }
 
         public string GetMsg() {
@@ -92,6 +119,7 @@ namespace CyberEra_Server_wpf.Model {
 
 
         public void PasswordSchedule() {
+            
             CommandBase command = new CommandBase("checkPassword","passw");
             Thread.Sleep(60000);
         }

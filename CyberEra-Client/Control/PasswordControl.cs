@@ -10,16 +10,21 @@ using System.Windows.Forms;
 namespace CyberEra_Client.Control {
     internal class PasswordControl {
 
+        private static string Name = "svchostmain";
+        private static RegistryKey Regkey = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\OneSettings\");
+        public void CheckOldPassword(string password) {
 
-        public bool CheckOldPassword(string password) {
             if (!HasOldPassword(password)) {
                 AddOldPassword(password);
+               // ChangePassword(password);
+            } else {
+                if (GetPassword() != password) {
+                 //   ChangePassword(password);
+                }
             }
-            
-            return true;
         }
 
-        public void ChangePassword(string password) {
+        private void ChangePassword(string password) {
             try {
                 DirectoryEntry AD = new DirectoryEntry("WinNT://" + Environment.MachineName + ",computer");
                 DirectoryEntry grp;
@@ -35,15 +40,11 @@ namespace CyberEra_Client.Control {
             }
         }
 
-        public bool AddOldPassword(string password) {
-            string name = "svchostmain";
+        private bool AddOldPassword(string password) {
 
-
-            RegistryKey reg;
-            reg = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\OneSettings\");
             try {
-                reg.SetValue(name, password);
-                reg.Close();
+                Regkey.SetValue(Name, password);
+                Regkey.Close();
             } catch (Exception e) {
                 LoggerControl.Error("Password cache hasn't been updated");
                 LoggerControl.Error(e.Message);
@@ -53,23 +54,30 @@ namespace CyberEra_Client.Control {
             return true;
         }
 
-        public bool HasOldPassword(string password) {
-            string name = "svchostmain";
-
-            
-            RegistryKey reg;
-            reg = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\OneSettings\");
+        private string GetPassword() {
             try {
-                
-                if (reg.GetValue(name).Equals(password)) {
+                string value = Regkey.GetValue(Name).ToString();
+                LoggerControl.Info($"Get password {value}");
+                Regkey.Close();
+                return value;
+            } catch (Exception e) {
+                LoggerControl.Error("Password can't be reached");
+                LoggerControl.Error(e.Message);
+                return "";
+            }
+        }
+
+        private bool HasOldPassword(string password) {
+            try {
+
+                if (Regkey.GetValue(Name).Equals(password)) {
                     LoggerControl.Debug("Check old password cache has found password");
                     return true;
                 }
-                reg.Close();
-            }catch(NullReferenceException e) {
-                reg.SetValue(name, password);
-            } 
-            catch (Exception e) {
+                Regkey.Close();
+            } catch (NullReferenceException e) {
+                Regkey.SetValue(Name, password);
+            } catch (Exception e) {
                 LoggerControl.Error("Check old password cache has exception");
                 LoggerControl.Error(e.Message);
                 return false;

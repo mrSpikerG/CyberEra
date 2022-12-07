@@ -40,6 +40,12 @@ namespace CyberEra_Server_wpf.Model {
             this.UpdateTime();
         }
 
+        public Computer(string? name, string? id,string? time) {
+            this.ComputerName = name;
+            this.Id = id;
+            this.timeOfUpdating= time;
+        }
+
         public int MyProperty { get; set; }
         public void UpdateTime() {
             

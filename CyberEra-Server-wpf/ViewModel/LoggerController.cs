@@ -1,5 +1,9 @@
-﻿using log4net;
-
+﻿using CyberEra_Server_wpf.Control;
+using CyberEra_Server_wpf.Model.DataBaseModels;
+using Dapper;
+using log4net;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace CyberEra_Server_wpf.ViewModel {
     internal class LoggerController {

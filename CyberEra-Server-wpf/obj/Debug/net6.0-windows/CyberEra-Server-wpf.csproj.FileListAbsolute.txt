@@ -72,3 +72,5 @@ C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\bin\Debug\ne
 C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\bin\Debug\net6.0-windows\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\bin\Debug\net6.0-windows\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\bin\Debug\net6.0-windows\Dapper.dll
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\obj\Debug\net6.0-windows\View\PasswordGiver.g.cs
+C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\obj\Debug\net6.0-windows\View\PasswordGiver.baml

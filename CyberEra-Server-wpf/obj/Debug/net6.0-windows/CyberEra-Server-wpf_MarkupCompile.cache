@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\thespiker\source\repos\CyberEra-Server\CyberEra-Server-wpf\App.xaml
-21179276529
+31189477980
 
-131508733730
+171569407410
 227171708441
-View\Computer.xaml;View\MainWindow.xaml;
+View\Computer.xaml;View\MainWindow.xaml;View\PasswordGiver.xaml;
 
 False
 

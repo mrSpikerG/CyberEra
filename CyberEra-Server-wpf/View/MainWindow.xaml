@@ -33,18 +33,20 @@
                 <DropShadowEffect BlurRadius="8" ShadowDepth="0"/>
             </Rectangle.Effect>
         </Rectangle>
-        
-        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type"  Grid.Row="0">Компьютеры </Button>
-        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type"  Grid.Row="1">Пароли</Button>
+
+        <Button Command="{Binding ChangeComputerVisibility}" Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type"  Grid.Row="0">Компьютеры </Button>
+        <Button Command="{Binding ChangePasswordVisibility}" Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type"  Grid.Row="1">Пароли</Button>
         <!--<Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type" Grid.Row="2">Админ-панель</Button>-->
 
 
         <!--<uc:Computer Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" DataContext="{Binding SelectedComputer}"></uc:Computer>-->
 
 
-        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type" Grid.Column="1" Margin="100 0" Grid.Row="4">Выдать пароль</Button>
-        
-        <ScrollViewer Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="150 50 50 50">
+        <Button Background="#F1AA02"  BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type" Grid.Column="1" Margin="100 0" Grid.Row="4" Command="{Binding OpenPasswordGiver}">Выдать пароль</Button>
+        <Button Background="#F1AA02" BorderBrush="Transparent" FontWeight="ExtraBold" FontFamily="Brutal Type" Grid.Column="2" Margin="30 0" Grid.Row="4" Command="{Binding KickCommand}">Отключить компьютер</Button>
+        <!---->
+
+        <ScrollViewer Visibility="{Binding IsComputersHidden, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="150 50 50 50">
             <ListBox Background="#1F2A38" Grid.ColumnSpan="2" ItemsSource="{Binding Computers, UpdateSourceTrigger=PropertyChanged}"
                  SelectedItem="{Binding SelectedComputer}">
                 <ListBox.ItemContainerStyle>
@@ -60,6 +62,22 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
-        
+
+        <ScrollViewer Visibility="{Binding IsPasswordHiden, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="150 50 50 50">
+            <ListBox Background="#1F2A38" Grid.ColumnSpan="2" ItemsSource="{Binding Passwords, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <uc:Computer Margin="0 2" DataContext="{Binding}"></uc:Computer>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+
     </Grid>
 </Window>

@@ -1,6 +1,10 @@
-﻿using CyberEra_Server_wpf.ViewModel;
+﻿using CyberEra_Server_wpf.Control;
+using CyberEra_Server_wpf.ViewModel;
+using Dapper;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +24,18 @@ namespace CyberEra_Server_wpf {
     /// </summary>
     public partial class MainWindow : Window {
         public MainWindow() {
-        
-                InitializeComponent();
 
-                DataContext = new MainViewModel();
-           
+            InitializeComponent();
+            DataContext = new MainViewModel();
+            this.Closing += MainWindowClosing;
+        }
+
+        private void MainWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e) {
+            using (IDbConnection db = new SqlConnection(SettingsController.GetInstance().GetSettings().DBConnectionString)) {
+                db.Equals("DELETE FROM Passwords");
+                db.Equals("DELETE FROM OldPasswords");
+                db.Equals("DELETE FROM Clients");
+            }
         }
     }
 }
