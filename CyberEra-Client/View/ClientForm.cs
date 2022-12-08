@@ -24,7 +24,8 @@ namespace CyberEra_Client {
 
         private static WindowsControl WindowsController = new WindowsControl();
         private static PasswordControl PasswordController = new PasswordControl();
-
+        private const int PORT = 8888;
+        private const string HOST = "127.0.0.1";
 
         public ClientForm() {
             InitializeComponent();
@@ -32,10 +33,9 @@ namespace CyberEra_Client {
             this.Bounds = Screen.PrimaryScreen.WorkingArea;
             this.FormClosing += new FormClosingEventHandler(ClientFormClosing);
             this.ShowInTaskbar= false;
-            
+            WindowsController.SetAutorunValue(true);
 
-            const int PORT = 8888;
-            const string HOST = "127.0.0.1";
+           
            
             try {
                 client.Connect(HOST, PORT);
