@@ -8,7 +8,10 @@
         xmlns:viewmodel="clr-namespace:CyberEra_Server_wpf.ViewModel" 
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        
+        MinHeight="400"
+        MinWidth="720"
+        MaxHeight="500"
+        MaxWidth="900"
         Icon="/View/icon.png"
         Title="CyberEra | Server" Height="450" Width="800">
     <Grid>
