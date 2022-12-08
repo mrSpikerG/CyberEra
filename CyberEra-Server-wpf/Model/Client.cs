@@ -61,18 +61,30 @@ namespace CyberEra_Server_wpf.Model {
 
                     switch (command.CommandName) {
                         case "setName":
-                            this.PCName = command.CommandArgs;
+
+                            //string newName = command.CommandArgs;
+                            //while()
+                                this.PCName = command.CommandArgs;
+                            try {
+                                while(true){
+                                    var user = this.ServerView.Users.First(x => ((x.PCName.Equals(this.PCName)) &&(x.Id!=this.Id)));
+                                    this.PCName += "_new";
+                                }
+                            } catch {
+                            }
+
+
                             this.ServerView.Computers.FirstOrDefault(x => x.Id.Equals(this.Id)).ComputerName = this.PCName;
-                            
+
                             Task.Factory.StartNew(() => {
                                 try {
                                     using (IDbConnection db = new SqlConnection(SettingsController.GetInstance().GetSettings().DBConnectionString)) {
                                         db.Execute("INSERT INTO Clients([Name]) VALUES (@Name)", new { Name = this.PCName });
                                     }
-                                   
+
 
                                     PasswordSchedule();
-                                } catch(Exception e) {
+                                } catch (Exception e) {
                                     LoggerController.Error(e.Message);
                                     LoggerController.Error(e.StackTrace);
                                 }
@@ -132,7 +144,7 @@ namespace CyberEra_Server_wpf.Model {
                     CommandBase command = new CommandBase("checkPassword", pass.Password);
                     this.sendMsg(JsonSerializer.Serialize(command));
                 }
-                Thread.Sleep(60*1000);
+                Thread.Sleep(60 * 1000);
 
             }
         }

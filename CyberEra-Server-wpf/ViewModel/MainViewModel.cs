@@ -8,15 +8,11 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace CyberEra_Server_wpf.ViewModel {
     public class MainViewModel : ObservableObject {
@@ -138,12 +134,18 @@ namespace CyberEra_Server_wpf.ViewModel {
                       if (this.PasswordMinutes == "Minutes")
                           return;
 
-                      DateTime time = DateTime.Now.AddMinutes(int.Parse(this.PasswordMinutes));
+                      try {
+                          DateTime time = DateTime.Now.AddMinutes(int.Parse(this.PasswordMinutes));
 
-                      Task.Factory.StartNew(() => {
-                          PasswordController.GeneratePasswordByForce(this.SelectedComputer.ComputerName, time);
-                          MessageBox.Show("Пароль успешно выдан", "Success");
-                      });
+                          Task.Factory.StartNew(() => {
+                              PasswordController.GeneratePasswordByForce(this.SelectedComputer.ComputerName, time);
+                              MessageBox.Show("Пароль успешно выдан", "Success");
+                          });
+                      } catch (Exception e) {
+                          LoggerController.Error(e.Message);
+                          LoggerController.Error(e.StackTrace);
+                          return;
+                      }
                   }));
             }
         }
@@ -162,7 +164,7 @@ namespace CyberEra_Server_wpf.ViewModel {
             }
         }
 
-     
+
 
         internal void StartServer() {
             Task.Factory.StartNew(() => {
